@@ -19,7 +19,7 @@ export const inputComponents = [
     __config__: {
       label: '单行文本',
       labelWidth: null,
-      showLabel: true,
+      showLabel: false,
       changeTag: true,
       tag: 'el-input',
       tagIcon: 'input',
@@ -146,6 +146,29 @@ export const inputComponents = [
     placeholder: '请输入',
     height: 300, // 编辑器高度
     branding: false // 隐藏右下角品牌烙印
+  },
+  {
+    // 组件的自定义配置
+    __config__: {
+      label: '文本',
+      labelWidth: null,
+      showLabel: false,
+      changeTag: true,
+      tag: 'span',
+      tagIcon: 'input',
+      defaultValue: undefined,
+      required: true,
+      layout: 'colFormItem',
+      span: 24,
+      document: 'https://element.eleme.cn/#/zh-CN/component/input',
+      // 正则校验规则
+      regList: []
+    },
+    // 组件的插槽属性
+    __slot__: {
+      prepend: '',
+      append: ''
+    }
   }
 ]
 

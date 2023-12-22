@@ -40,6 +40,7 @@ module.exports = {
   },
   productionSourceMap: false,
   configureWebpack: {
+    devtool: "#cheap-module-source-map", //'#source-map',
     externals: {
       vue: 'Vue',
       'vue-router': 'VueRouter',

@@ -104,6 +104,9 @@ export default {
     }
   },
   render(h) {
+    if (this.conf.__config__.tag === 'span') {
+      return h(this.conf.__config__.tag, this.conf.__config__.label)
+    }
     const dataObject = makeDataObject()
     const confClone = deepClone(this.conf)
     const children = this.$slots.default || []

@@ -40,7 +40,7 @@ function buildFormTemplate(scheme, child, type) {
     labelPosition = `label-position="${scheme.labelPosition}"`
   }
   const disabled = scheme.disabled ? `:disabled="${scheme.disabled}"` : ''
-  let str = `<el-form ref="${scheme.formRef}" :model="${scheme.formModel}" :rules="${scheme.formRules}" size="${scheme.size}" ${disabled} label-width="${scheme.labelWidth}px" ${labelPosition}>
+  let str = `<el-form class="form" ref="${scheme.formRef}" :model="${scheme.formModel}" :rules="${scheme.formRules}" size="${scheme.size}" ${disabled} label-width="${scheme.labelWidth}px" ${labelPosition}>
       ${child}
       ${buildFromBtns(scheme, type)}
     </el-form>`
@@ -60,7 +60,7 @@ function buildFromBtns(scheme, type) {
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>`
     if (someSpanIsNot24) {
-      str = `<el-col :span="24">
+      str = `<el-col  :span="24">
           ${str}
         </el-col>`
     }
@@ -71,7 +71,7 @@ function buildFromBtns(scheme, type) {
 // span不为24的用el-col包裹
 function colWrapper(scheme, str) {
   if (someSpanIsNot24 || scheme.__config__.span !== 24) {
-    return `<el-col :span="${scheme.__config__.span}">
+    return `<el-col  :span="${scheme.__config__.span}">
       ${str}
     </el-col>`
   }
@@ -92,9 +92,11 @@ const layouts = {
     }
     const required = !ruleTrigger[config.tag] && config.required ? 'required' : ''
     const tagDom = tags[config.tag] ? tags[config.tag](scheme) : null
-    let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required}>
-        ${tagDom}
-      </el-form-item>`
+    // wolfdog fixed
+    // let str = `<el-form-item ${labelWidth} ${label} prop="${scheme.__vModel__}" ${required}>
+    //     ${tagDom}
+    //   </el-form-item>`
+    let str = `${tagDom}`
     str = colWrapper(scheme, str)
     return str
   },
@@ -105,7 +107,7 @@ const layouts = {
     const align = scheme.type === 'default' ? '' : `align="${scheme.align}"`
     const gutter = scheme.gutter ? `:gutter="${scheme.gutter}"` : ''
     const children = config.children.map(el => layouts[el.__config__.layout](el))
-    let str = `<el-row ${type} ${justify} ${align} ${gutter}>
+    let str = `<el-row ${scheme.__config__.children.length === 1 ? 'class="colBorder"' : ''} ${type} ${justify} ${align} ${gutter}>
       ${children.join('\n')}
     </el-row>`
     str = colWrapper(scheme, str)
@@ -145,8 +147,14 @@ const tags = {
       : ''
     let child = buildElInputChild(el)
 
-    if (child) child = `\n${child}\n` // 换行
+    if (child) child = `\n${child}\n`
     return `<${tag} ${vModel} ${type} ${placeholder} ${maxlength} ${showWordLimit} ${readonly} ${disabled} ${clearable} ${prefixIcon} ${suffixIcon} ${showPassword} ${autosize} ${width}>${child}</${tag}>`
+  },
+  'span': el => {
+    const {
+      tag, disabled, vModel, clearable, placeholder, width
+    } = attrBuilder(el)
+    return `<span ${el.__config__.required ? 'class=xrequired':''}>${el.__config__.label}</span>`
   },
   'el-input-number': el => {
     const {
